@@ -10,13 +10,17 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    subwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    subwindow.h
 
 FORMS += \
     mainwindow.ui
+
+RESOURCES += resources.qrc
 
 TRANSLATIONS += \
     RichTextEdit_cs_CZ.ts

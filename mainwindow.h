@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMdiArea>
+#include "subwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +17,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
+private slots:
+
+    void addSubWindow();
+    void on_button_new_triggered();
+
 private:
     Ui::MainWindow *ui;
+    QMdiArea * mdiArea;
 };
 #endif // MAINWINDOW_H
