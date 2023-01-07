@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QTextEdit>
+#include <QMainWindow>
+#include <QMdiArea>
 
 class Subwindow : public QTextEdit
 {
@@ -11,6 +13,23 @@ class Subwindow : public QTextEdit
 public:
     Subwindow();
 
+    void newFile();
+    bool save();
+    bool saveAs();
+    bool saveFile(const QString &fileName);
+    bool loadFile(const QString &fileName);
+
+    QString userFriendlyCurrentFile();
+    QString currentFile() { return curFile; }
+
+private slots:
+    void documentWasModified();
+
+private:
+    void setCurrentFile(const QString &fileName);
+
+    QString curFile;
+    bool isUntitled;
 };
 
 #endif // SUBWINDOW_H

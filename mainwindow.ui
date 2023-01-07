@@ -105,6 +105,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="button_new"/>
+   <addaction name="button_open"/>
+   <addaction name="button_save"/>
   </widget>
   <action name="actionEnglish">
    <property name="checkable">
@@ -126,8 +128,18 @@
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
+   </property>
    <property name="text">
     <string>New</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new document</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -207,9 +219,56 @@
     <string>Create new document</string>
    </property>
   </action>
+  <action name="button_open">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open document...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="button_save">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save document</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

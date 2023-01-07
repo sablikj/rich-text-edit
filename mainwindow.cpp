@@ -1,6 +1,8 @@
 #include "mainwindow.h"
+#include "qmdisubwindow.h"
 #include "ui_mainwindow.h"
 #include "subwindow.h"
+#include <QtWidgets>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,23 +22,104 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addSubWindow()
+bool MainWindow::openFile(const QString &fileName)
 {
-    Subwindow *win = new Subwindow;
-    mdiArea->addSubWindow(win);
-    win->show();
+    if (QMdiSubWindow *existing = findSubwindow(fileName)) {
+        mdiArea->setActiveSubWindow(existing);
+        return true;
+    }
+    const bool succeeded = loadFile(fileName);
+    if (succeeded)
+        statusBar()->showMessage(tr("File loaded"), 2000);
+    return succeeded;
 }
-
 
 void MainWindow::on_button_new_triggered()
 {
-    QWidget *widget = new QWidget(mdiArea);
-    QGridLayout *gridLayout = new QGridLayout(widget);
-    widget->setLayout(gridLayout);
+    Subwindow *child = createSubwindow();
+    child->newFile();
+    child->show();
+}
+
+Subwindow *MainWindow::createSubwindow()
+{
+    Subwindow *child = new Subwindow;
+    mdiArea->addSubWindow(child);
+
+#ifndef QT_NO_CLIPBOARD
+    //connect(child, &QTextEdit::copyAvailable, cutAct, &QAction::setEnabled);
+    //connect(child, &QTextEdit::copyAvailable, copyAct, &QAction::setEnabled);
+#endif
+
+    return child;
+}
 
 
-    mdiArea->addSubWindow(widget);
-    widget->setWindowTitle("Untitled.rts");
-    widget->show();
+void MainWindow::on_actionNew_triggered()
+{
+    on_button_new_triggered();
+}
+
+
+void MainWindow::on_button_save_triggered()
+{
+    if (activeSubwindow() && activeSubwindow()->save())
+        statusBar()->showMessage(tr("File saved"), 2000);
+}
+
+Subwindow *MainWindow::activeSubwindow() const
+{
+    if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
+        return qobject_cast<Subwindow *>(activeSubWindow->widget());
+    return nullptr;
+}
+
+QMdiSubWindow *MainWindow::findSubwindow(const QString &fileName) const
+{
+    QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
+
+    const QList<QMdiSubWindow *> subWindows = mdiArea->subWindowList();
+    for (QMdiSubWindow *window : subWindows) {
+        Subwindow *mdiChild = qobject_cast<Subwindow *>(window->widget());
+        if (mdiChild->currentFile() == canonicalFilePath)
+            return window;
+    }
+    return nullptr;
+}
+
+bool MainWindow::loadFile(const QString &fileName)
+{
+    Subwindow *child = createSubwindow();
+    const bool succeeded = child->loadFile(fileName);
+    if (succeeded)
+        child->show();
+    else
+        child->close();
+    //MainWindow::prependToRecentFiles(fileName);
+    return succeeded;
+}
+
+
+void MainWindow::on_actionSave_triggered()
+{
+    on_button_save_triggered();
+}
+
+
+void MainWindow::on_actionSave_as_triggered()
+{
+    Subwindow *child = activeSubwindow();
+    if (child && child->saveAs()) {
+        statusBar()->showMessage(tr("File saved"), 2000);
+        //MainWindow::prependToRecentFiles(child->currentFile());
+    }
+}
+
+
+void MainWindow::on_button_open_triggered()
+{
+    const QString fileName = QFileDialog::getOpenFileName(this);
+    if (!fileName.isEmpty())
+        openFile(fileName);
 }
 

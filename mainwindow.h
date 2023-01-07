@@ -17,13 +17,24 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    bool openFile(const QString &fileName);
 
 private slots:
+    Subwindow *createSubwindow();
 
-    void addSubWindow();
     void on_button_new_triggered();
+    void on_button_save_triggered();
+    void on_button_open_triggered();
+
+    void on_actionNew_triggered();
+    void on_actionSave_triggered();
+    void on_actionSave_as_triggered();
 
 private:
+    Subwindow *activeSubwindow() const;
+    QMdiSubWindow *findSubwindow(const QString &fileName) const;
+    bool loadFile(const QString &fileName);
+
     Ui::MainWindow *ui;
     QMdiArea * mdiArea;
 };
