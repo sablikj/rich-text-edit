@@ -71,6 +71,9 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
+    <addaction name="actionFont"/>
+    <addaction name="actionColor"/>
+    <addaction name="actionBackground_Color"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
@@ -84,6 +87,8 @@
     </property>
     <addaction name="actionClose"/>
     <addaction name="actionClose_all"/>
+    <addaction name="separator"/>
+    <addaction name="actionWindow_background"/>
    </widget>
    <widget class="QMenu" name="menuLanguage">
     <property name="title">
@@ -118,10 +123,15 @@
    <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
+   <addaction name="actionPrint"/>
    <addaction name="separator"/>
    <addaction name="actionCopy"/>
    <addaction name="actionCut"/>
    <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+   <addaction name="actionFont"/>
+   <addaction name="actionColor"/>
+   <addaction name="actionFind"/>
   </widget>
   <action name="actionEnglish">
    <property name="checkable">
@@ -165,6 +175,9 @@
    <property name="text">
     <string>Open...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="enabled">
@@ -177,6 +190,9 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSave_as">
    <property name="enabled">
@@ -187,8 +203,15 @@
    </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/print.png</normaloff>:/images/print.png</iconset>
+   </property>
    <property name="text">
     <string>Print</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionExit">
@@ -227,6 +250,9 @@
    </property>
   </action>
   <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/cut.png</normaloff>:/images/cut.png</iconset>
@@ -239,6 +265,9 @@
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
@@ -263,18 +292,68 @@
    </property>
   </action>
   <action name="actionFind">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/find.png</normaloff>:/images/find.png</iconset>
+   </property>
    <property name="text">
     <string>Find...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionClose">
    <property name="text">
     <string>Close</string>
    </property>
+   <property name="toolTip">
+    <string>Close the active window</string>
+   </property>
   </action>
   <action name="actionClose_all">
    <property name="text">
     <string>Close all</string>
+   </property>
+   <property name="toolTip">
+    <string>Close all windows</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/font.png</normaloff>:/images/font.png</iconset>
+   </property>
+   <property name="text">
+    <string>Font</string>
+   </property>
+  </action>
+  <action name="actionColor">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/text_color.png</normaloff>:/images/text_color.png</iconset>
+   </property>
+   <property name="text">
+    <string>Color</string>
+   </property>
+  </action>
+  <action name="actionBackground_Color">
+   <property name="text">
+    <string>Text background</string>
+   </property>
+  </action>
+  <action name="actionWindow_background">
+   <property name="text">
+    <string>Set background</string>
    </property>
   </action>
  </widget>

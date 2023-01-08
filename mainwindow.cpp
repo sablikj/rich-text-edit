@@ -2,7 +2,11 @@
 #include "qmdisubwindow.h"
 #include "ui_mainwindow.h"
 #include "subwindow.h"
+
 #include <QtWidgets>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -56,12 +60,17 @@ Subwindow *MainWindow::createSubwindow()
     Subwindow *child = new Subwindow;
     mdiArea->addSubWindow(child);
 
+    // TODO: Rework
     ui->actionSave->setEnabled(true);
     ui->actionSave_as->setEnabled(true);
 
+    ui->actionFont->setEnabled(true);
+    ui->actionColor->setEnabled(true);
+    ui->actionBackground_Color->setEnabled(true);
+
 #ifndef QT_NO_CLIPBOARD
-    //connect(child, &QTextEdit::copyAvailable, cutAct, &QAction::setEnabled);
-    //connect(child, &QTextEdit::copyAvailable, copyAct, &QAction::setEnabled);
+    connect(child, &QTextEdit::copyAvailable, ui->actionCopy, &QAction::setEnabled);
+    connect(child, &QTextEdit::copyAvailable, ui->actionCut, &QAction::setEnabled);
 #endif
 
     return child;
@@ -95,7 +104,6 @@ bool MainWindow::loadFile(const QString &fileName)
         child->show();
     else
         child->close();
-    //MainWindow::prependToRecentFiles(fileName);
     return succeeded;
 }
 
@@ -122,7 +130,6 @@ void MainWindow::on_actionSave_as_triggered()
     Subwindow *child = activeSubwindow();
     if (child && child->saveAs()) {
         statusBar()->showMessage(tr("File saved"), 2000);
-        //MainWindow::prependToRecentFiles(child->currentFile());
     }
 }
 
@@ -133,6 +140,7 @@ void MainWindow::on_actionOpen_triggered()
         openFile(fileName);
 }
 
+#ifndef QT_NO_CLIPBOARD
 void MainWindow::on_actionCopy_triggered()
 {
     if(activeSubwindow()){
@@ -154,6 +162,121 @@ void MainWindow::on_actionCut_triggered()
     if(activeSubwindow()){
         activeSubwindow()->cut();
     }
+}
+#endif
+
+void MainWindow::on_actionUndo_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->undo();
+    }
+}
+
+
+void MainWindow::on_actionRedo_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->redo();
+    }
+}
+
+
+void MainWindow::on_actionClose_triggered()
+{
+    mdiArea->closeActiveSubWindow();
+}
+
+
+void MainWindow::on_actionClose_all_triggered()
+{
+    mdiArea->closeAllSubWindows();
+}
+
+void MainWindow::on_actionFont_triggered()
+{
+    bool success;
+    QFont font = QFontDialog::getFont(&success, this);
+
+    if(success){
+        if(activeSubwindow()){
+            activeSubwindow()->setFont(font);
+        }
+    }
+    else{
+        return;
+    }
+}
+
+
+void MainWindow::on_actionColor_triggered()
+{
+    QColor color = QColorDialog::getColor(Qt::black, this, "Choose color");
+
+    if(color.isValid())
+    {
+        if(activeSubwindow()){
+            activeSubwindow()->setTextColor(color);
+        }
+    }
+}
+
+
+void MainWindow::on_actionBackground_Color_triggered()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this, "Choose text background color");
+
+    if(color.isValid())
+    {
+        if(activeSubwindow()){
+            activeSubwindow()->setTextBackgroundColor(color);
+        }
+    }
+}
+
+
+void MainWindow::on_actionWindow_background_triggered()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this, "Choose text background color");
+
+    if(color.isValid())
+    {
+        if(activeSubwindow()){
+            activeSubwindow()->setPalette(QPalette(color));
+        }
+    }
+}
+
+
+void MainWindow::on_actionPrint_triggered()
+{
+    QPrinter printer;
+    printer.setPageSize(QPageSize::A4);
+    printer.setPageOrientation(QPageLayout::Portrait);
+    printer.setFullPage(true);
+
+    QPrintPreviewDialog *printPreview = new QPrintPreviewDialog(&printer);
+    connect(printPreview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(print(QPrinter*)));
+
+    printPreview->setWindowTitle("Preview Dialog");
+    Qt::WindowFlags flags(Qt::WindowTitleHint);
+    printPreview->setWindowFlags(flags);
+    printPreview->exec();
+
+}
+
+void MainWindow::print(QPrinter *printer)
+{
+    QPainter painter(printer);
+    painter.setRenderHints(QPainter::Antialiasing |
+                       QPainter::TextAntialiasing |
+                       QPainter::SmoothPixmapTransform, true);
+
+    if(activeSubwindow()){
+        QTextDocument *doc = activeSubwindow()->document();
+        doc->drawContents(&painter);
+    }
+
+    painter.end();
 }
 
 ///////////
@@ -181,19 +304,3 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event)
            event->acceptProposedAction();
     }
 }
-
-void MainWindow::on_actionUndo_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->undo();
-    }
-}
-
-
-void MainWindow::on_actionRedo_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->redo();
-    }
-}
-

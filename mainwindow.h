@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMdiArea>
+#include <QPrinter>
 #include "subwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -30,13 +31,26 @@ private slots:
     void on_actionSave_as_triggered();
     void on_actionOpen_triggered();
 
+#ifndef QT_NO_CLIPBOARD
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
     void on_actionCut_triggered();
+#endif
 
     void on_actionUndo_triggered();
-
     void on_actionRedo_triggered();
+
+    void on_actionClose_triggered();
+    void on_actionClose_all_triggered();
+
+    void on_actionFont_triggered();
+    void on_actionColor_triggered();
+    void on_actionBackground_Color_triggered();
+
+    void on_actionWindow_background_triggered();
+
+    void on_actionPrint_triggered();
+    void print(QPrinter *printer);
 
 private:
     /*
