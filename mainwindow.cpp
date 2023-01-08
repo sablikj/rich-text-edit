@@ -13,8 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
     mdiArea = new QMdiArea(this);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
+    mdiArea->setViewMode(QMdiArea::TabbedView);
+    mdiArea->setTabsClosable(true);
+    mdiArea->setTabsMovable(true);
+    mdiArea->setDocumentMode(true);
     setCentralWidget(mdiArea);
+
+    // Drag and Drop
+    setAcceptDrops(true);
 }
 
 MainWindow::~MainWindow()
@@ -34,11 +40,15 @@ bool MainWindow::openFile(const QString &fileName)
     return succeeded;
 }
 
-void MainWindow::on_button_new_triggered()
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    Subwindow *child = createSubwindow();
-    child->newFile();
-    child->show();
+    mdiArea->closeAllSubWindows();
+    if (mdiArea->currentSubWindow()) {
+        event->ignore();
+    } else {
+        //writeSettings();
+        event->accept();
+    }
 }
 
 Subwindow *MainWindow::createSubwindow()
@@ -46,25 +56,15 @@ Subwindow *MainWindow::createSubwindow()
     Subwindow *child = new Subwindow;
     mdiArea->addSubWindow(child);
 
+    ui->actionSave->setEnabled(true);
+    ui->actionSave_as->setEnabled(true);
+
 #ifndef QT_NO_CLIPBOARD
     //connect(child, &QTextEdit::copyAvailable, cutAct, &QAction::setEnabled);
     //connect(child, &QTextEdit::copyAvailable, copyAct, &QAction::setEnabled);
 #endif
 
     return child;
-}
-
-
-void MainWindow::on_actionNew_triggered()
-{
-    on_button_new_triggered();
-}
-
-
-void MainWindow::on_button_save_triggered()
-{
-    if (activeSubwindow() && activeSubwindow()->save())
-        statusBar()->showMessage(tr("File saved"), 2000);
 }
 
 Subwindow *MainWindow::activeSubwindow() const
@@ -99,10 +99,21 @@ bool MainWindow::loadFile(const QString &fileName)
     return succeeded;
 }
 
+///////////
+// Actions
+///////////
+
+void MainWindow::on_actionNew_triggered()
+{
+    Subwindow *child = createSubwindow();
+    child->newFile();
+    child->show();
+}
 
 void MainWindow::on_actionSave_triggered()
 {
-    on_button_save_triggered();
+    if (activeSubwindow() && activeSubwindow()->save())
+        statusBar()->showMessage(tr("File saved"), 2000);
 }
 
 
@@ -115,11 +126,74 @@ void MainWindow::on_actionSave_as_triggered()
     }
 }
 
-
-void MainWindow::on_button_open_triggered()
+void MainWindow::on_actionOpen_triggered()
 {
     const QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
         openFile(fileName);
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->copy();
+    }
+}
+
+
+void MainWindow::on_actionPaste_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->paste();
+    }
+}
+
+
+void MainWindow::on_actionCut_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->cut();
+    }
+}
+
+///////////
+// Drag and drop
+///////////
+
+void MainWindow::dragEnterEvent(QDragEnterEvent* event)
+ {
+    if (event->mimeData()->hasUrls()) {
+            event->acceptProposedAction();
+        }
+ }
+
+ void MainWindow::dragMoveEvent(QDragMoveEvent* event)
+ {
+   event->acceptProposedAction();
+ }
+
+ void MainWindow::dropEvent(QDropEvent* event)
+ {
+    foreach (const QUrl &url, event->mimeData()->urls()) {
+         QString fileName = url.toLocalFile();
+         qDebug() << "Dropped file:" << fileName;
+         if(openFile(fileName))
+           event->acceptProposedAction();
+    }
+}
+
+void MainWindow::on_actionUndo_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->undo();
+    }
+}
+
+
+void MainWindow::on_actionRedo_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->redo();
+    }
 }
 

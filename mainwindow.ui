@@ -18,17 +18,22 @@
     <item row="1" column="0">
      <widget class="QMdiArea" name="mdiArea">
       <property name="viewMode">
-       <enum>QMdiArea::TabbedView</enum>
+       <enum>QMdiArea::SubWindowView</enum>
       </property>
       <property name="documentMode">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="tabsClosable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="tabsMovable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
+      <widget class="QWidget" name="subwindow">
+       <property name="windowTitle">
+        <string>Subwindow</string>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -95,6 +100,9 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -104,9 +112,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="button_new"/>
-   <addaction name="button_open"/>
-   <addaction name="button_save"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionPaste"/>
   </widget>
   <action name="actionEnglish">
    <property name="checkable">
@@ -143,16 +158,30 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+   </property>
    <property name="text">
     <string>Open...</string>
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save as</string>
    </property>
@@ -168,28 +197,69 @@
    </property>
   </action>
   <action name="actionUndo">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/undo.png</normaloff>:/images/undo.png</iconset>
+   </property>
    <property name="text">
     <string>Undo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="actionRedo">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/redo.png</normaloff>:/images/redo.png</iconset>
+   </property>
    <property name="text">
     <string>Redo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
   </action>
   <action name="actionCut">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/cut.png</normaloff>:/images/cut.png</iconset>
+   </property>
    <property name="text">
     <string>Cut</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
   <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
   <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/paste.png</normaloff>:/images/paste.png</iconset>
+   </property>
    <property name="text">
     <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionFind">
@@ -205,48 +275,6 @@
   <action name="actionClose_all">
    <property name="text">
     <string>Close all</string>
-   </property>
-  </action>
-  <action name="button_new">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
-   </property>
-   <property name="text">
-    <string>New</string>
-   </property>
-   <property name="toolTip">
-    <string>Create new document</string>
-   </property>
-  </action>
-  <action name="button_open">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open</string>
-   </property>
-   <property name="toolTip">
-    <string>Open document...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="button_save">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-   <property name="toolTip">
-    <string>Save document</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

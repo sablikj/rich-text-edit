@@ -90,9 +90,40 @@ QString Subwindow::userFriendlyCurrentFile()
     return QFileInfo(curFile).fileName();
 }
 
+void Subwindow::closeEvent(QCloseEvent *event)
+{
+    if (maybeSave()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 void Subwindow::documentWasModified()
 {
     setWindowModified(document()->isModified());
+}
+
+bool Subwindow::maybeSave()
+{
+    if (!document()->isModified())
+        return true;
+    const QMessageBox::StandardButton ret
+            = QMessageBox::warning(this, tr("RichTextEdit"),
+                                   tr("'%1' has been modified.\n"
+                                      "Do you want to save your changes?")
+                                   .arg(userFriendlyCurrentFile()),
+                                   QMessageBox::Save | QMessageBox::Discard
+                                   | QMessageBox::Cancel);
+    switch (ret) {
+    case QMessageBox::Save:
+        return save();
+    case QMessageBox::Cancel:
+        return false;
+    default:
+        break;
+    }
+    return true;
 }
 
 void Subwindow::setCurrentFile(const QString &fileName)

@@ -22,10 +22,14 @@ public:
     QString userFriendlyCurrentFile();
     QString currentFile() { return curFile; }
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private slots:
     void documentWasModified();
 
 private:
+    bool maybeSave();
     void setCurrentFile(const QString &fileName);
 
     QString curFile;
