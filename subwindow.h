@@ -22,6 +22,14 @@ public:
     QString userFriendlyCurrentFile();
     QString currentFile() { return curFile; }
 
+public slots:
+    bool find(QString query, bool caseSensitive, bool wholeWords);
+    void replace(QString what, QString with, bool caseSensitive, bool wholeWords);
+    void replaceAll(QString what, QString with, bool caseSensitive, bool wholeWords);
+
+signals:
+    void findResultReady(QString message);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 
@@ -31,9 +39,12 @@ private slots:
 private:
     bool maybeSave();
     void setCurrentFile(const QString &fileName);
+    void moveCursorTo(int positionInText);
+    QTextDocument::FindFlags getSearchOptionsFromFlags(bool caseSensitive, bool wholeWords);
 
     QString curFile;
     bool isUntitled;
+
 };
 
 #endif // SUBWINDOW_H

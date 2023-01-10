@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QMdiArea>
 #include <QPrinter>
+
 #include "subwindow.h"
+#include "finddialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -52,6 +54,8 @@ private slots:
     void on_actionPrint_triggered();
     void print(QPrinter *printer);
 
+    void on_actionFind_triggered();
+
 private:
     /*
     * this event is called when the mouse enters the widgets area during a drag/drop operation
@@ -74,5 +78,6 @@ private:
 
     Ui::MainWindow *ui;
     QMdiArea * mdiArea;
+    FindDialog *findDialog;
 };
 #endif // MAINWINDOW_H

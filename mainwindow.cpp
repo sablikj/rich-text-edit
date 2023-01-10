@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
 
     mdiArea = new QMdiArea(this);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -25,11 +25,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Drag and Drop
     setAcceptDrops(true);
+
+    // Set up the find dialog
+    findDialog = new FindDialog();
+    findDialog->setParent(this, Qt::Tool | Qt::MSWindowsFixedSizeDialogHint);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete ui;    
 }
 
 bool MainWindow::openFile(const QString &fileName)
@@ -304,3 +308,20 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event)
            event->acceptProposedAction();
     }
 }
+
+void MainWindow::on_actionFind_triggered()
+{
+    connect(findDialog, SIGNAL(startFinding(QString, bool, bool)), activeSubwindow(), SLOT(find(QString, bool, bool)));
+    connect(findDialog, SIGNAL(startReplacing(QString, QString, bool, bool)), activeSubwindow(), SLOT(replace(QString, QString, bool, bool)));
+    connect(findDialog, SIGNAL(startReplacingAll(QString, QString, bool, bool)), activeSubwindow(), SLOT(replaceAll(QString, QString, bool, bool)));
+    connect(activeSubwindow(), SIGNAL(findResultReady(QString)), findDialog, SLOT(onFindResultReady(QString)));
+
+    if (findDialog->isHidden())
+    {
+        findDialog->show();
+        findDialog->activateWindow();
+        findDialog->raise();
+        findDialog->setFocus();
+    }
+}
+
