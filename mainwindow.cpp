@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "subwindow.h"
 
+#include <QSettings>
 #include <QtWidgets>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);    
 
+    // MDI setup
     mdiArea = new QMdiArea(this);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -26,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Drag and Drop
     setAcceptDrops(true);
 
-    // Set up the find dialog
+    // Find dialog setup
     findDialog = new FindDialog();
-    findDialog->setParent(this, Qt::Tool | Qt::MSWindowsFixedSizeDialogHint);
+    findDialog->setParent(this, Qt::Tool | Qt::MSWindowsFixedSizeDialogHint);    
 }
 
 MainWindow::~MainWindow()
@@ -203,7 +205,9 @@ void MainWindow::on_actionFont_triggered()
 
     if(success){
         if(activeSubwindow()){
-            activeSubwindow()->setFont(font);
+            QTextCharFormat format;
+            format.setFont(font);
+            activeSubwindow()->textCursor().mergeCharFormat(format);
         }
     }
     else{
@@ -214,12 +218,14 @@ void MainWindow::on_actionFont_triggered()
 
 void MainWindow::on_actionColor_triggered()
 {
-    QColor color = QColorDialog::getColor(Qt::black, this, "Choose color");
+    QColor color = QColorDialog::getColor(Qt::black, this, "Choose text color");
 
     if(color.isValid())
     {
         if(activeSubwindow()){
-            activeSubwindow()->setTextColor(color);
+            QTextCharFormat format;
+            format.setForeground(color);
+            activeSubwindow()->textCursor().mergeCharFormat(format);
         }
     }
 }
@@ -232,24 +238,12 @@ void MainWindow::on_actionBackground_Color_triggered()
     if(color.isValid())
     {
         if(activeSubwindow()){
-            activeSubwindow()->setTextBackgroundColor(color);
+            QTextCharFormat format;
+            format.setBackground(color);
+            activeSubwindow()->textCursor().mergeCharFormat(format);
         }
     }
 }
-
-
-void MainWindow::on_actionWindow_background_triggered()
-{
-    QColor color = QColorDialog::getColor(Qt::white, this, "Choose text background color");
-
-    if(color.isValid())
-    {
-        if(activeSubwindow()){
-            activeSubwindow()->setPalette(QPalette(color));
-        }
-    }
-}
-
 
 void MainWindow::on_actionPrint_triggered()
 {
@@ -325,3 +319,7 @@ void MainWindow::on_actionFind_triggered()
     }
 }
 
+void MainWindow::on_actionReplace_triggered()
+{
+    on_actionFind_triggered();
+}

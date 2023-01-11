@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Notepad</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -80,6 +80,7 @@
      <string>Search</string>
     </property>
     <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -88,20 +89,12 @@
     <addaction name="actionClose"/>
     <addaction name="actionClose_all"/>
     <addaction name="separator"/>
-    <addaction name="actionWindow_background"/>
-   </widget>
-   <widget class="QMenu" name="menuLanguage">
-    <property name="title">
-     <string>Language</string>
-    </property>
-    <addaction name="actionEnglish"/>
-    <addaction name="action_e_tina"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuSearch"/>
    <addaction name="menuWindow"/>
-   <addaction name="menuLanguage"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -133,25 +126,6 @@
    <addaction name="actionColor"/>
    <addaction name="actionFind"/>
   </widget>
-  <action name="actionEnglish">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>English</string>
-   </property>
-  </action>
-  <action name="action_e_tina">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Čeština</string>
-   </property>
-  </action>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -351,9 +325,9 @@
     <string>Text background</string>
    </property>
   </action>
-  <action name="actionWindow_background">
+  <action name="actionReplace">
    <property name="text">
-    <string>Set background</string>
+    <string>Replace</string>
    </property>
   </action>
  </widget>

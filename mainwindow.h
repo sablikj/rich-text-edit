@@ -49,12 +49,11 @@ private slots:
     void on_actionColor_triggered();
     void on_actionBackground_Color_triggered();
 
-    void on_actionWindow_background_triggered();
-
     void on_actionPrint_triggered();
     void print(QPrinter *printer);
 
     void on_actionFind_triggered();
+    void on_actionReplace_triggered();
 
 private:
     /*

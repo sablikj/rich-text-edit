@@ -25,11 +25,6 @@ FORMS += \
 
 RESOURCES += resources.qrc
 
-TRANSLATIONS += \
-    RichTextEdit_cs_CZ.ts
-CONFIG += lrelease
-CONFIG += embed_translations
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -13,13 +13,13 @@
   <property name="windowTitle">
    <string>Find and Replace</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="find_label">
            <property name="text">
@@ -28,18 +28,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="find_value"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
           <widget class="QLabel" name="replace_label">
            <property name="text">
             <string>Replace with:</string>
            </property>
           </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLineEdit" name="find_value"/>
          </item>
          <item>
           <widget class="QLineEdit" name="replace_value"/>

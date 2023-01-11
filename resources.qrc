@@ -12,5 +12,6 @@
         <file>images/font.png</file>
         <file>images/text_color.png</file>
         <file>images/find.png</file>
+        <file>images/notepad.png</file>
     </qresource>
 </RCC>

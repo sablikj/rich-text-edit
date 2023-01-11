@@ -53,7 +53,7 @@ bool Subwindow::saveFile(const QString &fileName)
     QGuiApplication::restoreOverrideCursor();
 
     if (!errorMessage.isEmpty()) {
-        QMessageBox::warning(this, tr("RichTextEditor"), errorMessage);
+        QMessageBox::warning(this, tr("Notepad"), errorMessage);
         return false;
     }
 
@@ -109,7 +109,7 @@ bool Subwindow::maybeSave()
     if (!document()->isModified())
         return true;
     const QMessageBox::StandardButton ret
-            = QMessageBox::warning(this, tr("RichTextEdit"),
+            = QMessageBox::warning(this, tr("Notepad"),
                                    tr("'%1' has been modified.\n"
                                       "Do you want to save your changes?")
                                    .arg(userFriendlyCurrentFile()),
