@@ -8,9 +8,8 @@ FindDialog::FindDialog(QWidget *parent)
 {    
     ui->setupUi(this);
 
-    // Ensures that the line edit gets the focus whenever the dialog is the active window
+    // Sets Find line edit focus
     setFocusProxy(ui->find_value);
-
     connect(ui->replace_all, SIGNAL(clicked()), this, SLOT(on_replace_clicked()));
 }
 
@@ -36,7 +35,6 @@ void FindDialog::on_find_next_clicked()
     emit(startFinding(query, caseSensitive, wholeWords));
 }
 
-
 void FindDialog::on_replace_clicked()
 {
     QString what = ui->find_value->text();
@@ -61,4 +59,3 @@ void FindDialog::on_replace_clicked()
         emit(startReplacingAll(what, with, caseSensitive, wholeWords));
     }
 }
-

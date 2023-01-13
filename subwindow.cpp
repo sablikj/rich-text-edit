@@ -85,6 +85,59 @@ bool Subwindow::loadFile(const QString &fileName)
     return true;
 }
 
+void Subwindow::align(Qt::Alignment position)
+{
+    QTextCursor cursor = this->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(position);
+    cursor.mergeBlockFormat(textBlockFormat);
+    this->setTextCursor(cursor);
+}
+
+void Subwindow::list(QTextListFormat::Style format)
+{
+    QTextCursor cursor = this->textCursor();
+    QTextList *list = cursor.currentList();
+    QTextListFormat listFormat;
+
+    if(list)
+    {
+        // Removing list
+        listFormat.setIndent( 0 );
+        listFormat.setStyle(format);
+        list->setFormat(listFormat);
+
+        for(int i = list->count()-1; i>= 0;--i)
+            list->removeItem(i);
+    }
+    else
+    {
+        // Creating list
+        listFormat.setStyle(format);
+        cursor.createList(listFormat);
+    }
+}
+
+void Subwindow::insertImage()
+{
+    QString file = QFileDialog::getOpenFileName(this, tr("Select an image"),
+                                      ".", tr("Bitmap Files (*.bmp)\n"
+                                        "JPEG (*.jpg *jpeg)\n"
+                                        "GIF (*.gif)\n"
+                                        "PNG (*.png)\n"));
+    QUrl Uri ( QString ( "file://%1" ).arg ( file ) );
+    QImage image = QImageReader ( file ).read();
+
+    QTextDocument * textDocument = this->document();
+    textDocument->addResource( QTextDocument::ImageResource, Uri, QVariant ( image ) );
+    QTextCursor cursor = this->textCursor();
+    QTextImageFormat imageFormat;
+    imageFormat.setWidth( image.width() );
+    imageFormat.setHeight( image.height() );
+    imageFormat.setName( Uri.toString() );
+    cursor.insertImage(imageFormat);
+}
+
 QString Subwindow::userFriendlyCurrentFile()
 {
     return QFileInfo(curFile).fileName();
@@ -138,45 +191,33 @@ void Subwindow::setCurrentFile(const QString &fileName)
 
 bool Subwindow::find(QString query, bool caseSensitive, bool wholeWords)
 {
-    // Keep track of the cursor position prior to this search so we can return to it if no match is found
-    int cursorPositionBeforeCurrentSearch = textCursor().position();
+    int startPos = textCursor().position();
 
-    // Specify the options we'll be searching with
+    // Flags
     QTextDocument::FindFlags searchOptions = getSearchOptionsFromFlags(caseSensitive, wholeWords);
 
-    // Search from the current position until the end of the document
     bool matchFound = QTextEdit::find(query, searchOptions);
 
-    // If we didn't find a match, search from the top of the document
     if (!matchFound)
     {
+        // Search from start
         moveCursor(QTextCursor::Start);
         matchFound = QTextEdit::find(query, searchOptions);
-    }
 
-    // If we found a match...
-    if (matchFound)
-    {
-        int foundPosition = textCursor().position();
-    }
-    else
-    {
-        // Reset the cursor to its position prior to this particular search
-        moveCursorTo(cursorPositionBeforeCurrentSearch);
+        if (!matchFound)
+        {
+            // Reset the cursor
+            moveCursorTo(startPos);
 
-        // Inform the user of the unsuccessful search
-        emit(findResultReady("No results found."));
+            // Inform the user of the unsuccessful search
+            emit(findResultReady("No results found."));
+        }
     }
 
     return matchFound;
 }
 
-/* Called when the user clicks the Replace button in FindDialog.
- * @param what - the string to find and replace
- * @param with - the string with which to replace any match
- * @param caseSensitive - flag denoting whether the search should heed the case of results
- * @param wholeWords - flag denoting whether the search should look for whole word matches or partials
- */
+
 void Subwindow::replace(QString what, QString with, bool caseSensitive, bool wholeWords)
 {
     bool found = find(what, caseSensitive, wholeWords);
@@ -190,18 +231,11 @@ void Subwindow::replace(QString what, QString with, bool caseSensitive, bool who
     }
 }
 
-/* Called when the user clicks the Replace All button in FindDialog.
- * @param what - the string to find and replace
- * @param with - the string with which to replace all matches
- * @param caseSensitive - flag denoting whether the search should heed the case of results
- * @param wholeWords - flag denoting whether the search should look for whole word matches or partials
- */
+
 void Subwindow::replaceAll(QString what, QString with, bool caseSensitive, bool wholeWords)
 {
-    // Search the entire document from the very beginning
+    // Search from start
     moveCursorTo(0);
-
-    // Conduct an initial search; don't rely on our custom find
     QTextDocument::FindFlags searchOptions = getSearchOptionsFromFlags(caseSensitive, wholeWords);
     bool found = QTextEdit::find(what, searchOptions);
     int replacements = 0;
@@ -220,7 +254,6 @@ void Subwindow::replaceAll(QString what, QString with, bool caseSensitive, bool 
     cursor.movePosition(QTextCursor::End);
     this->setTextCursor(cursor);
 
-    // End-of-operation feedback
     if (replacements == 0)
     {
         emit(findResultReady("No results found."));
@@ -231,8 +264,6 @@ void Subwindow::replaceAll(QString what, QString with, bool caseSensitive, bool 
     }
 }
 
-/* Moves this Editor's text cursor to the specified index position in the document.
- */
 void Subwindow::moveCursorTo(int positionInText)
 {
     QTextCursor newCursor = textCursor();
@@ -240,10 +271,7 @@ void Subwindow::moveCursorTo(int positionInText)
     setTextCursor(newCursor);
 }
 
-/* Returns a QTextDocument::FindFlags representing all the flags a search should be conducted with.
- * @param caseSensitive - flag denoting whether the search should heed the case of results
- * @param wholeWords - flag denoting whether the search should look for whole word matches or partials
- */
+// Returns a QTextDocument::FindFlags representing all the search flags
 QTextDocument::FindFlags Subwindow::getSearchOptionsFromFlags(bool caseSensitive, bool wholeWords)
 {
     QTextDocument::FindFlags searchOptions = QTextDocument::FindFlags();

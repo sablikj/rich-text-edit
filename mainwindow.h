@@ -55,20 +55,21 @@ private slots:
     void on_actionFind_triggered();
     void on_actionReplace_triggered();
 
+    void on_actionAlign_left_triggered();
+    void on_actionAlign_center_triggered();
+    void on_actionAlign_right_triggered();
+
+    void on_actionList_bullet_triggered();
+    void on_actionList_numbered_triggered();
+    void on_actionList_letter_triggered();
+    void on_actionList_roman_triggered();
+
+    void on_actionInsert_image_triggered();
+
 private:
-    /*
-    * this event is called when the mouse enters the widgets area during a drag/drop operation
-    */
-    void dragEnterEvent(QDragEnterEvent* event) override;
-
-    /**
-    * this event is called when the mouse moves inside the widgets area during a drag/drop operation
-    */
-    void dragMoveEvent(QDragMoveEvent* event) override;
-
-    /**
-    * this event is called when the drop operation is initiated at the widget
-    */
+    // Drag and Drop events
+    void dragEnterEvent(QDragEnterEvent* event) override;   
+    void dragMoveEvent(QDragMoveEvent* event) override;    
     void dropEvent(QDropEvent* event) override;
 
     Subwindow *activeSubwindow() const;

@@ -74,6 +74,8 @@
     <addaction name="actionFont"/>
     <addaction name="actionColor"/>
     <addaction name="actionBackground_Color"/>
+    <addaction name="separator"/>
+    <addaction name="actionInsert_image"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
@@ -91,7 +93,21 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuFormat">
+    <property name="title">
+     <string>Format</string>
+    </property>
+    <addaction name="actionAlign_left"/>
+    <addaction name="actionAlign_center"/>
+    <addaction name="actionAlign_right"/>
+    <addaction name="separator"/>
+    <addaction name="actionList_bullet"/>
+    <addaction name="actionList_numbered"/>
+    <addaction name="actionList_letter"/>
+    <addaction name="actionList_roman"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuFormat"/>
    <addaction name="menuEdit"/>
    <addaction name="menuSearch"/>
    <addaction name="menuWindow"/>
@@ -116,7 +132,10 @@
    <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionInsert_image"/>
    <addaction name="actionPrint"/>
+   <addaction name="actionFind"/>
    <addaction name="separator"/>
    <addaction name="actionCopy"/>
    <addaction name="actionCut"/>
@@ -124,7 +143,16 @@
    <addaction name="separator"/>
    <addaction name="actionFont"/>
    <addaction name="actionColor"/>
-   <addaction name="actionFind"/>
+   <addaction name="actionBackground_Color"/>
+   <addaction name="separator"/>
+   <addaction name="actionAlign_left"/>
+   <addaction name="actionAlign_center"/>
+   <addaction name="actionAlign_right"/>
+   <addaction name="separator"/>
+   <addaction name="actionList_bullet"/>
+   <addaction name="actionList_numbered"/>
+   <addaction name="actionList_letter"/>
+   <addaction name="actionList_roman"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -287,6 +315,9 @@
    <property name="toolTip">
     <string>Close the active window</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
   </action>
   <action name="actionClose_all">
    <property name="text">
@@ -321,6 +352,10 @@
    </property>
   </action>
   <action name="actionBackground_Color">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/text_highlight.png</normaloff>:/images/text_highlight.png</iconset>
+   </property>
    <property name="text">
     <string>Text background</string>
    </property>
@@ -328,6 +363,81 @@
   <action name="actionReplace">
    <property name="text">
     <string>Replace</string>
+   </property>
+  </action>
+  <action name="actionAlign_left">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/align-left.png</normaloff>:/images/align-left.png</iconset>
+   </property>
+   <property name="text">
+    <string>Align left</string>
+   </property>
+  </action>
+  <action name="actionAlign_center">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/align-center.png</normaloff>:/images/align-center.png</iconset>
+   </property>
+   <property name="text">
+    <string>Align center</string>
+   </property>
+  </action>
+  <action name="actionAlign_right">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/align-right.png</normaloff>:/images/align-right.png</iconset>
+   </property>
+   <property name="text">
+    <string>Align right</string>
+   </property>
+   <property name="toolTip">
+    <string>Align right</string>
+   </property>
+  </action>
+  <action name="actionList_bullet">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/list_bullet.png</normaloff>:/images/list_bullet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bullet list</string>
+   </property>
+  </action>
+  <action name="actionList_numbered">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/list_numbered.png</normaloff>:/images/list_numbered.png</iconset>
+   </property>
+   <property name="text">
+    <string>Numbered list</string>
+   </property>
+  </action>
+  <action name="actionList_letter">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/list_letter.png</normaloff>:/images/list_letter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Letter list</string>
+   </property>
+  </action>
+  <action name="actionList_roman">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/list_roman.png</normaloff>:/images/list_roman.png</iconset>
+   </property>
+   <property name="text">
+    <string>Roman list</string>
+   </property>
+  </action>
+  <action name="actionInsert_image">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/insert_image.png</normaloff>:/images/insert_image.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insert image</string>
    </property>
   </action>
  </widget>

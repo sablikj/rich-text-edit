@@ -13,5 +13,14 @@
         <file>images/text_color.png</file>
         <file>images/find.png</file>
         <file>images/notepad.png</file>
+        <file>images/align-center.png</file>
+        <file>images/align-left.png</file>
+        <file>images/align-right.png</file>
+        <file>images/list_bullet.png</file>
+        <file>images/list_letter.png</file>
+        <file>images/list_numbered.png</file>
+        <file>images/list_roman.png</file>
+        <file>images/insert_image.png</file>
+        <file>images/text_highlight.png</file>
     </qresource>
 </RCC>

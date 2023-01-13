@@ -17,7 +17,11 @@ public:
     bool save();
     bool saveAs();
     bool saveFile(const QString &fileName);
-    bool loadFile(const QString &fileName);
+    bool loadFile(const QString &fileName);    
+
+    void align(Qt::Alignment position);
+    void list(QTextListFormat::Style format);
+    void insertImage();
 
     QString userFriendlyCurrentFile();
     QString currentFile() { return curFile; }
@@ -44,7 +48,6 @@ private:
 
     QString curFile;
     bool isUntitled;
-
 };
 
 #endif // SUBWINDOW_H

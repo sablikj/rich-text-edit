@@ -55,8 +55,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     mdiArea->closeAllSubWindows();
     if (mdiArea->currentSubWindow()) {
         event->ignore();
-    } else {
-        //writeSettings();
+    } else {        
         event->accept();
     }
 }
@@ -66,7 +65,6 @@ Subwindow *MainWindow::createSubwindow()
     Subwindow *child = new Subwindow;
     mdiArea->addSubWindow(child);
 
-    // TODO: Rework
     ui->actionSave->setEnabled(true);
     ui->actionSave_as->setEnabled(true);
 
@@ -198,6 +196,10 @@ void MainWindow::on_actionClose_all_triggered()
     mdiArea->closeAllSubWindows();
 }
 
+///////////
+// Font and Color
+///////////
+
 void MainWindow::on_actionFont_triggered()
 {
     bool success;
@@ -245,6 +247,10 @@ void MainWindow::on_actionBackground_Color_triggered()
     }
 }
 
+///////////
+// Print
+///////////
+
 void MainWindow::on_actionPrint_triggered()
 {
     QPrinter printer;
@@ -278,6 +284,31 @@ void MainWindow::print(QPrinter *printer)
 }
 
 ///////////
+// Find and Replace
+///////////
+
+void MainWindow::on_actionFind_triggered()
+{
+    connect(findDialog, SIGNAL(startFinding(QString, bool, bool)), activeSubwindow(), SLOT(find(QString, bool, bool)));
+    connect(findDialog, SIGNAL(startReplacing(QString, QString, bool, bool)), activeSubwindow(), SLOT(replace(QString, QString, bool, bool)));
+    connect(findDialog, SIGNAL(startReplacingAll(QString, QString, bool, bool)), activeSubwindow(), SLOT(replaceAll(QString, QString, bool, bool)));
+    connect(activeSubwindow(), SIGNAL(findResultReady(QString)), findDialog, SLOT(onFindResultReady(QString)));
+
+    if (findDialog->isHidden())
+    {
+        findDialog->show();
+        findDialog->activateWindow();
+        findDialog->raise();
+        findDialog->setFocus();
+    }
+}
+
+void MainWindow::on_actionReplace_triggered()
+{
+    on_actionFind_triggered();
+}
+
+///////////
 // Drag and drop
 ///////////
 
@@ -303,23 +334,67 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event)
     }
 }
 
-void MainWindow::on_actionFind_triggered()
+void MainWindow::on_actionAlign_left_triggered()
 {
-    connect(findDialog, SIGNAL(startFinding(QString, bool, bool)), activeSubwindow(), SLOT(find(QString, bool, bool)));
-    connect(findDialog, SIGNAL(startReplacing(QString, QString, bool, bool)), activeSubwindow(), SLOT(replace(QString, QString, bool, bool)));
-    connect(findDialog, SIGNAL(startReplacingAll(QString, QString, bool, bool)), activeSubwindow(), SLOT(replaceAll(QString, QString, bool, bool)));
-    connect(activeSubwindow(), SIGNAL(findResultReady(QString)), findDialog, SLOT(onFindResultReady(QString)));
-
-    if (findDialog->isHidden())
-    {
-        findDialog->show();
-        findDialog->activateWindow();
-        findDialog->raise();
-        findDialog->setFocus();
+    if(activeSubwindow()){
+        activeSubwindow()->align(Qt::AlignLeft);
     }
 }
 
-void MainWindow::on_actionReplace_triggered()
+
+void MainWindow::on_actionAlign_center_triggered()
 {
-    on_actionFind_triggered();
+    if(activeSubwindow()){
+        activeSubwindow()->align(Qt::AlignCenter);
+    }
 }
+
+
+void MainWindow::on_actionAlign_right_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->align(Qt::AlignRight);
+    }
+}
+
+
+void MainWindow::on_actionList_bullet_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->list(QTextListFormat::ListDisc);
+    }
+}
+
+
+void MainWindow::on_actionList_numbered_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->list(QTextListFormat::ListDecimal);
+    }
+}
+
+
+void MainWindow::on_actionList_letter_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->list(QTextListFormat::ListLowerAlpha);
+    }
+}
+
+
+void MainWindow::on_actionList_roman_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->list(QTextListFormat::ListUpperRoman);
+    }
+}
+
+
+void MainWindow::on_actionInsert_image_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->insertImage();
+    }
+
+}
+
