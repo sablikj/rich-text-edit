@@ -1,4 +1,4 @@
-#include "subwindow.h"
+﻿#include "subwindow.h"
 #include <QtWidgets>
 
 Subwindow::Subwindow()
@@ -65,23 +65,19 @@ bool Subwindow::loadFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("MDI"),
+        QMessageBox::warning(this, tr("Notepad"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
         return false;
     }
-
     QTextStream in(&file);
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     setHtml(in.readAll());
     QGuiApplication::restoreOverrideCursor();
 
     setCurrentFile(fileName);
-
-    connect(document(), &QTextDocument::contentsChanged,
-            this, &Subwindow::documentWasModified);
-
+    connect(document(), &QTextDocument::contentsChanged,this, &Subwindow::documentWasModified);
     return true;
 }
 
@@ -118,27 +114,7 @@ void Subwindow::list(QTextListFormat::Style format)
     }
 }
 
-void Subwindow::insertImage()
-{
-    QString file = QFileDialog::getOpenFileName(this, tr("Select an image"),
-                                      ".", tr("Bitmap Files (*.bmp)\n"
-                                        "JPEG (*.jpg *jpeg)\n"
-                                        "GIF (*.gif)\n"
-                                        "PNG (*.png)\n"));
-    QUrl Uri ( QString ( "file://%1" ).arg ( file ) );
-    QImage image = QImageReader ( file ).read();
-
-    QTextDocument * textDocument = this->document();
-    textDocument->addResource( QTextDocument::ImageResource, Uri, QVariant ( image ) );
-    QTextCursor cursor = this->textCursor();
-    QTextImageFormat imageFormat;
-    imageFormat.setWidth( image.width() );
-    imageFormat.setHeight( image.height() );
-    imageFormat.setName( Uri.toString() );
-    cursor.insertImage(imageFormat);
-}
-
-QString Subwindow::userFriendlyCurrentFile()
+QString Subwindow::currentFileName()
 {
     return QFileInfo(curFile).fileName();
 }
@@ -165,7 +141,7 @@ bool Subwindow::maybeSave()
             = QMessageBox::warning(this, tr("Notepad"),
                                    tr("'%1' has been modified.\n"
                                       "Do you want to save your changes?")
-                                   .arg(userFriendlyCurrentFile()),
+                                   .arg(currentFileName()),
                                    QMessageBox::Save | QMessageBox::Discard
                                    | QMessageBox::Cancel);
     switch (ret) {
@@ -185,9 +161,8 @@ void Subwindow::setCurrentFile(const QString &fileName)
     isUntitled = false;
     document()->setModified(false);
     setWindowModified(false);
-    setWindowTitle(userFriendlyCurrentFile() + "[*]");
+    setWindowTitle(currentFileName() + "[*]");
 }
-
 
 bool Subwindow::find(QString query, bool caseSensitive, bool wholeWords)
 {
@@ -197,7 +172,6 @@ bool Subwindow::find(QString query, bool caseSensitive, bool wholeWords)
     QTextDocument::FindFlags searchOptions = getSearchOptionsFromFlags(caseSensitive, wholeWords);
 
     bool matchFound = QTextEdit::find(query, searchOptions);
-
     if (!matchFound)
     {
         // Search from start
@@ -213,15 +187,12 @@ bool Subwindow::find(QString query, bool caseSensitive, bool wholeWords)
             emit(findResultReady("No results found."));
         }
     }
-
     return matchFound;
 }
-
 
 void Subwindow::replace(QString what, QString with, bool caseSensitive, bool wholeWords)
 {
     bool found = find(what, caseSensitive, wholeWords);
-
     if (found)
     {
         QTextCursor cursor = textCursor();
@@ -230,7 +201,6 @@ void Subwindow::replace(QString what, QString with, bool caseSensitive, bool who
         cursor.endEditBlock();        
     }
 }
-
 
 void Subwindow::replaceAll(QString what, QString with, bool caseSensitive, bool wholeWords)
 {

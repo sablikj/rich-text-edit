@@ -20,10 +20,9 @@ public:
     bool loadFile(const QString &fileName);    
 
     void align(Qt::Alignment position);
-    void list(QTextListFormat::Style format);
-    void insertImage();
+    void list(QTextListFormat::Style format);   
 
-    QString userFriendlyCurrentFile();
+    QString currentFileName();
     QString currentFile() { return curFile; }
 
 public slots:

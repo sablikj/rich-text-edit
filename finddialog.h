@@ -22,6 +22,7 @@ signals:
     void startReplacingAll(QString what, QString with, bool caseSensitive, bool wholeWords);
 
 public slots:
+    // Messagebox for displaying results of find and replace ops
     void onFindResultReady(QString message) { QMessageBox::information(this, "Find and Replace", message); }
 
 private slots:

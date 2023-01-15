@@ -13,17 +13,14 @@ FindDialog::FindDialog(QWidget *parent)
     connect(ui->replace_all, SIGNAL(clicked()), this, SLOT(on_replace_clicked()));
 }
 
-
 FindDialog::~FindDialog()
 {
     delete ui;
 }
 
-
 void FindDialog::on_find_next_clicked()
 {
     QString query = ui->find_value->text();
-
     if (query.isEmpty())
     {
         QMessageBox::information(this, tr("Empty Field"), tr("Please enter a query."));
@@ -38,7 +35,6 @@ void FindDialog::on_find_next_clicked()
 void FindDialog::on_replace_clicked()
 {
     QString what = ui->find_value->text();
-
     if (what.isEmpty())
     {
         QMessageBox::information(this, tr("Empty Field"), tr("Please enter a query."));

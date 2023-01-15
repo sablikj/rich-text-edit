@@ -112,7 +112,7 @@ bool MainWindow::loadFile(const QString &fileName)
 }
 
 ///////////
-// Actions
+// Basic actions
 ///////////
 
 void MainWindow::on_actionNew_triggered()
@@ -127,7 +127,6 @@ void MainWindow::on_actionSave_triggered()
     if (activeSubwindow() && activeSubwindow()->save())
         statusBar()->showMessage(tr("File saved"), 2000);
 }
-
 
 void MainWindow::on_actionSave_as_triggered()
 {
@@ -144,38 +143,12 @@ void MainWindow::on_actionOpen_triggered()
         openFile(fileName);
 }
 
-#ifndef QT_NO_CLIPBOARD
-void MainWindow::on_actionCopy_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->copy();
-    }
-}
-
-
-void MainWindow::on_actionPaste_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->paste();
-    }
-}
-
-
-void MainWindow::on_actionCut_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->cut();
-    }
-}
-#endif
-
 void MainWindow::on_actionUndo_triggered()
 {
     if(activeSubwindow()){
         activeSubwindow()->undo();
     }
 }
-
 
 void MainWindow::on_actionRedo_triggered()
 {
@@ -184,17 +157,42 @@ void MainWindow::on_actionRedo_triggered()
     }
 }
 
-
 void MainWindow::on_actionClose_triggered()
 {
     mdiArea->closeActiveSubWindow();
 }
 
-
 void MainWindow::on_actionClose_all_triggered()
 {
     mdiArea->closeAllSubWindows();
 }
+
+///////////
+// Clipboard actions
+///////////
+
+#ifndef QT_NO_CLIPBOARD
+void MainWindow::on_actionCopy_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->copy();
+    }
+}
+
+void MainWindow::on_actionPaste_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->paste();
+    }
+}
+
+void MainWindow::on_actionCut_triggered()
+{
+    if(activeSubwindow()){
+        activeSubwindow()->cut();
+    }
+}
+#endif
 
 ///////////
 // Font and Color
@@ -217,7 +215,6 @@ void MainWindow::on_actionFont_triggered()
     }
 }
 
-
 void MainWindow::on_actionColor_triggered()
 {
     QColor color = QColorDialog::getColor(Qt::black, this, "Choose text color");
@@ -231,7 +228,6 @@ void MainWindow::on_actionColor_triggered()
         }
     }
 }
-
 
 void MainWindow::on_actionBackground_Color_triggered()
 {
@@ -313,16 +309,16 @@ void MainWindow::on_actionReplace_triggered()
 ///////////
 
 void MainWindow::dragEnterEvent(QDragEnterEvent* event)
- {
+{
     if (event->mimeData()->hasUrls()) {
-            event->acceptProposedAction();
-        }
- }
+        event->acceptProposedAction();
+    }
+}
 
- void MainWindow::dragMoveEvent(QDragMoveEvent* event)
- {
-   event->acceptProposedAction();
- }
+void MainWindow::dragMoveEvent(QDragMoveEvent* event)
+{
+event->acceptProposedAction();
+}
 
  void MainWindow::dropEvent(QDropEvent* event)
  {
@@ -334,13 +330,16 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event)
     }
 }
 
+///////////
+// Align
+///////////
+
 void MainWindow::on_actionAlign_left_triggered()
 {
     if(activeSubwindow()){
         activeSubwindow()->align(Qt::AlignLeft);
     }
 }
-
 
 void MainWindow::on_actionAlign_center_triggered()
 {
@@ -349,7 +348,6 @@ void MainWindow::on_actionAlign_center_triggered()
     }
 }
 
-
 void MainWindow::on_actionAlign_right_triggered()
 {
     if(activeSubwindow()){
@@ -357,6 +355,9 @@ void MainWindow::on_actionAlign_right_triggered()
     }
 }
 
+///////////
+// Lists
+///////////
 
 void MainWindow::on_actionList_bullet_triggered()
 {
@@ -365,14 +366,12 @@ void MainWindow::on_actionList_bullet_triggered()
     }
 }
 
-
 void MainWindow::on_actionList_numbered_triggered()
 {
     if(activeSubwindow()){
         activeSubwindow()->list(QTextListFormat::ListDecimal);
     }
 }
-
 
 void MainWindow::on_actionList_letter_triggered()
 {
@@ -381,20 +380,9 @@ void MainWindow::on_actionList_letter_triggered()
     }
 }
 
-
 void MainWindow::on_actionList_roman_triggered()
 {
     if(activeSubwindow()){
         activeSubwindow()->list(QTextListFormat::ListUpperRoman);
     }
 }
-
-
-void MainWindow::on_actionInsert_image_triggered()
-{
-    if(activeSubwindow()){
-        activeSubwindow()->insertImage();
-    }
-
-}
-
