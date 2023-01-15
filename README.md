@@ -1,7 +1,7 @@
-# Notepad
+# <img width="32" height="32" src="./icons/notepad.png"> Notepad
 Multiplatform notepad app with MDI layout created using Qt widgets.  
 
-Features:
+## Features:
 * MDI
 * Different fonts
 * Colored and highlighted text
@@ -12,4 +12,8 @@ Features:
 * Drag and drop documents
 * Print with document preview
 
+## Example
 
+<p align="center">
+  <img width="50%" height="50%" src="./app.png" alt="App demo">
+</p>
